@@ -7,35 +7,36 @@ ser = serial.Serial("/dev/ttyS0",9600)	#UART
 import busca.recog
 
 ident = busca.recog.identificar()
-b = 0
-parada = str(chr(115))
-
+passo = 0
+achei = 0
 
 while(True):
 	posicao = ident.comparar()
-	
+	if ser.read(1) == b'a':
+		passo+=1
 	time.sleep(1.5)
 	if posicao == None:
 		print("buscando objetivo")
-		#if ser.read(1) == 'a':	#1 eh o tamanho de bytes a serem lidos
-		if b < 5:
-			ser.write(b'2')
-		elif b > 5 and b < 10:
-			ser.write(b'3')
-		else:
-			b = 0
-		b+=1
+		#if ser.read(1) == b'a':	#1 eh o tamanho de bytes a serem lidos
+		ser.write(b'2')
 
 	elif posicao[0] < 280:
 		ser.write(b'9')
 		h = posicao[0]
-		c = posicao[1]
+		#c = posicao[1]
 		print("indo ao objetivo",h)
-		#if ser.read() == 'a':
+		#if ser.read() == b'a':
+		'''
 		if c < 140:
 			ser.write(b'3')
 		elif c > 290:
 			ser.write(b'2')
+		'''
+		achei = passo
+		time.sleep(1)
+		if passo > achei:
+			for giro in range(passo-achei):
+				ser.write(b'3')
 		ser.write(b'0')
 		
 	elif posicao[0] >= 280:
