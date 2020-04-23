@@ -1,0 +1,22 @@
+ARVORE DE DEPENDENCIAS:
+
+PLAY.PY:
+deslocarP3|buscarObj|recog|cv2
+
+DESLOCARP3:
+stepper|locRoboP3|time|math
+
+BUSCAROBJ:
+recog|stepper|time|locRoboP3|deslocarP3|locObjP3
+
+RECOG:
+face_recognition|cv2|numpy
+
+STEPPER:
+time|RPi.GPIO
+
+LOCROBOP3:
+os|json
+
+LOCOBJP3:
+os|JSON

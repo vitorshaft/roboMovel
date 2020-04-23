@@ -1,0 +1,8 @@
+PARA LER TENSãO NO RASPBERRY:
+
+Nucleo: /opt/vc/bin/vcgencmd measure_volts core
+RAM: /opt/vc/bin/vcgencmd measure_volts sdram_c
+	 /opt/vc/bin/vcgencmd measure_volts sdram_i
+	 /opt/vc/bin/vcgencmd measure_volts sdram_p
+	 
+A SOMA DAS TENSõES DEVE SER SUPERIOR A 4,65 V PARA EVITAR RESET
