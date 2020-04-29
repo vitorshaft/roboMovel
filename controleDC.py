@@ -72,6 +72,54 @@ def dire(d):
 	GPIO.output(in3,GPIO.HIGH)
 	GPIO.output(in4,GPIO.HIGH)
 	#GPIO.cleanup()
+def frente(d):
+	global pEsq
+	global pDir
+	pEsq = 0
+	pDir = 0
+	sp = d/15
+	while(pEsq <= sp or pDir <= sp):
+		pwmDir.ChangeDutyCycle(50)
+		pwmEsq.ChangeDutyCycle(50)
+		GPIO.output(in1,GPIO.LOW)
+		GPIO.output(in2,GPIO.HIGH)
+		GPIO.output(in3,GPIO.LOW)
+		GPIO.output(in4,GPIO.HIGH)
+	pwmEsq.ChangeDutyCycle(0)
+	pwmDir.ChangeDutyCycle(0)
+	GPIO.output(in1,GPIO.HIGH)
+	GPIO.output(in2,GPIO.HIGH)
+	GPIO.output(in3,GPIO.HIGH)
+	GPIO.output(in4,GPIO.HIGH)
+
+def esqRad(graus):
+	global pDir
+	pDir = 0
+	sp = graus/7.5
+	while(pDir < sp):
+		#GPIO.output(en,GPIO.HIGH)
+		pwmEsq.ChangeDutyCycle(30)
+		GPIO.output(in1,GPIO.LOW)
+		GPIO.output(in2,GPIO.HIGH)
+	#GPIO.output(en,GPIO.HIGH)
+	pwmEsq.ChangeDutyCycle(0)
+	GPIO.output(in1,GPIO.HIGH)
+	GPIO.output(in2,GPIO.HIGH)
+
+def dirRad(graus):
+	global pEsq
+	pEsq = 0
+	sp = graus/7.5
+	while(pEsq < sp):
+		#GPIO.output(en,GPIO.HIGH)
+		pwmDir.ChangeDutyCycle(30)
+		GPIO.output(in3,GPIO.LOW)
+		GPIO.output(in4,GPIO.HIGH)
+	#GPIO.output(en,GPIO.HIGH)
+	pwmDir.ChangeDutyCycle(0)
+	GPIO.output(in3,GPIO.HIGH)
+	GPIO.output(in4,GPIO.HIGH)
+		
 		
 GPIO.add_event_detect(encEsq, GPIO.BOTH, callback=esquerda)
 GPIO.add_event_detect(encDir, GPIO.BOTH, callback=direita)
@@ -84,7 +132,10 @@ GPIO.output(in2,GPIO.HIGH)
 #sleep(3)
 GPIO.output(in2,GPIO.LOW)
 '''
-esq(60)
+delta = int(input("distancia em mm: "))
+esqRad(delta)
 sleep(2)
-dire(60)
+dirRad(delta)
+sleep(1)
+frente(delta)
 GPIO.cleanup()
