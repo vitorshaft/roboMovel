@@ -76,51 +76,77 @@ class mover:
 		GPIO.output(self.in3,GPIO.HIGH)
 		GPIO.output(self.in4,GPIO.HIGH)
 		#GPIO.cleanup()
-	def frente(self,d):
+	def frente(self,d):	#distancia em cm
 		#global self.pEsq
 		#global self.pDir
 		self.pEsq = 0
 		self.pDir = 0
-		self.sp = d/15
-		print(self.sp)
-		while(self.pEsq <= self.sp or self.pDir <= self.sp):
+		self.sp = d/3	#cada pulso desloca o robo 3 cm
+		#print(self.sp)
+		while(self.pEsq < self.sp or self.pDir < self.sp):
 			self.pwmDir.ChangeDutyCycle(50)
 			self.pwmEsq.ChangeDutyCycle(50)
-			print(self.pEsq,self.pDir)
+			#print(self.pEsq,self.pDir)
 			GPIO.output(self.in1,GPIO.LOW)
 			GPIO.output(self.in2,GPIO.HIGH)
 			GPIO.output(self.in3,GPIO.LOW)
 			GPIO.output(self.in4,GPIO.HIGH)
+		print("parada")
 		self.pwmEsq.ChangeDutyCycle(0)
 		self.pwmDir.ChangeDutyCycle(0)
 		GPIO.output(self.in1,GPIO.HIGH)
 		GPIO.output(self.in2,GPIO.HIGH)
 		GPIO.output(self.in3,GPIO.HIGH)
 		GPIO.output(self.in4,GPIO.HIGH)
-	
-	def esqRad(self,graus):
+
+	def tras(self,d):	#distancia em cm
+		#global self.pEsq
+		#global self.pDir
+		self.pEsq = 0
+		self.pDir = 0
+		self.sp = d/3	#cada pulso desloca o robo 3 cm
+		#print(self.sp)
+		while(self.pEsq <= self.sp or self.pDir <= self.sp):
+			self.pwmDir.ChangeDutyCycle(50)
+			self.pwmEsq.ChangeDutyCycle(50)
+			#print(self.pEsq,self.pDir)
+			GPIO.output(self.in1,GPIO.HIGH)
+			GPIO.output(self.in2,GPIO.LOW)
+			GPIO.output(self.in3,GPIO.HIGH)
+			GPIO.output(self.in4,GPIO.LOW)
+		print("parada")
+		self.pwmEsq.ChangeDutyCycle(0)
+		self.pwmDir.ChangeDutyCycle(0)
+		GPIO.output(self.in1,GPIO.HIGH)
+		GPIO.output(self.in2,GPIO.HIGH)
+		GPIO.output(self.in3,GPIO.HIGH)
+		GPIO.output(self.in4,GPIO.HIGH)
+
+	def dirRad(self,graus):
 		#global self.pDir
 		self.pDir = 0
-		self.sp = graus/7.5
+		self.sp = graus/15
 		while(self.pDir < self.sp):
 			#GPIO.output(en,GPIO.HIGH)
-			self.pwmEsq.ChangeDutyCycle(30)
+			self.pwmEsq.ChangeDutyCycle(50)
 			GPIO.output(self.in1,GPIO.LOW)
 			GPIO.output(self.in2,GPIO.HIGH)
+		print(self.sp)
 		#GPIO.output(en,GPIO.HIGH)
 		self.pwmEsq.ChangeDutyCycle(0)
 		GPIO.output(self.in1,GPIO.HIGH)
 		GPIO.output(self.in2,GPIO.HIGH)
 	
-	def dirRad(graus):
+	def esqRad(self,graus):
 		#global self.pEsq
 		self.pEsq = 0
-		self.sp = graus/7.5
+		self.sp = graus/15
 		while(self.pEsq < self.sp):
 			#GPIO.output(en,GPIO.HIGH)
-			self.pwmDir.ChangeDutyCycle(30)
+			self.pwmDir.ChangeDutyCycle(50)
 			GPIO.output(self.in3,GPIO.LOW)
 			GPIO.output(self.in4,GPIO.HIGH)
+		print(self.sp)
 		#GPIO.output(en,GPIO.HIGH)
 		self.pwmDir.ChangeDutyCycle(0)
 		GPIO.output(self.in3,GPIO.HIGH)
