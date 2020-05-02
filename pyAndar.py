@@ -151,6 +151,13 @@ class mover:
 		self.pwmDir.ChangeDutyCycle(0)
 		GPIO.output(self.in3,GPIO.HIGH)
 		GPIO.output(self.in4,GPIO.HIGH)
+	def parar(self):
+		self.pwmDir.ChangeDutyCycle(0)
+		self.pwmEsq.ChangeDutyCycle(0)
+		GPIO.output(self.in1,GPIO.HIGH)
+		GPIO.output(self.in2,GPIO.HIGH)
+		GPIO.output(self.in3,GPIO.HIGH)
+		GPIO.output(self.in4,GPIO.HIGH)
 		
 		
 
