@@ -72,6 +72,11 @@ class identificar:
 				center = (right+left)/2
 				altura = bottom-top
 				centro = (right+left)/2
+				'''
+				f = open("angular.txt","w")
+				f.write("1")
+				f.close()
+				'''
 				return [altura,centro]
 			#cv2.imshow('Video', self.small_frame)
 			

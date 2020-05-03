@@ -1,0 +1,12 @@
+#####UTILIDADES######
+
+ESCRITA/LEITURA DE ARQUIVOS:
+
+f = open("arquivo.extensao", "a") #adiciona conteudo ao final do arquivo
+f = open("arquivo.extensao", "w") #sobrescreve conteudo
+f = open("arquivo.extensao", "r") #le conteudo
+f = open("arquivo.extensao", "x") #cria arquivo novo com o nome do 1o arg
+
+f.write("texto") #insere "texto" ao conteudo do arquivo
+f.read() #le conteudo completo do arquivo e armazena numa string
+f.readlines() #le conteudo e armazena em lista com itens separados por linha
