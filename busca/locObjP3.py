@@ -15,7 +15,7 @@ class locobj:
 			self.x = self.DB[0]['px']
 			self.y = self.DB[0]['py']
 			
-			return [self.seno,self.cosseno,self.x,self.y,self.teta]
+			return [self.x,self.y]
 
 	def writeObj(self,arq,x,y):
 		self.dados['loc'][0] = {"px": x, "py": y}
