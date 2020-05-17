@@ -15,6 +15,7 @@ x = andar.mover()
 coor = lugar.loc()
 conv = coord.converter()	#polarCart(teta,dist)>[sen,cos,x,y] cartPolar(x,y)>[teta,dist]
 arquivoRobo = '/home/pi/roboMovel/locRobo.json'
+arquivoObj = '/home/pi/roboMovel/locObj.json'
 passo = 0
 achei = 0
 
@@ -54,7 +55,16 @@ while(True):
 		#else:
 		x.frente(30)
 		desloc = conv.polarCart(passo,30)
-		coor.writeLoc(arquivoRobo,desloc[0],desloc[1],pRobo[2]+desloc[2],pRobo[3]+desloc[3],passo)
+		coor.writeLoc(arquivoRobo,pRobo[2]+desloc[2],pRobo[3]+desloc[3],desloc[0],desloc[1],passo)
+		dObj = (775*230)/h
+		pObj = conv.polarCart(passo,dObj) #calcula a posicao do obj em relacao ao robo. Passo = angulo do robo, dObj = hipotenusa
+		import busca.locObjP3
+		obj = busca.locObjP3.locobj()
+		#ant = obj.readObj('/home/pi/roboMovel/locObj.json')
+		obj.writeObj(arquivoObj,pRobo[2]+pObj[2],pRobo[3]+pObj[3]) #computa localizacao do obj em relacao ao ambiente
+		print("objeto avistado a %d cm"%dObj)
+		sleep(1)
+		x.parar()
 		break
 		
 	elif posicao[0] >= 200:
@@ -65,8 +75,9 @@ while(True):
 		pObj = conv.polarCart(passo,dObj)
 		import busca.locObjP3
 		obj = busca.locObjP3.locobj()
-		ant = obj.readObj('/home/pi/roboMovel/locObj.json')
-		atual = obj.writeObj(ant[0]+pObj[0],ant[1]+pObj[1])
+		#ant = obj.readObj('/home/pi/roboMovel/locObj.json')
+		obj.writeObj(arquivoObj,pRobo[2]+pObj[2],pRobo[3]+pObj[3]) #computa localizacao do obj em relacao ao ambiente
+		print("objeto avistado a %d cm"%dObj)
 		sleep(1)
 		x.parar()
 		break
