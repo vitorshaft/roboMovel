@@ -8,7 +8,7 @@ class mover:
 		self.in1 = 21
 		self.in2 = 20
 		self.enB = 25
-		self.enA = 2
+		self.enA = 18
 		self.encEsq = 17
 		self.encDir = 27
 		
@@ -128,7 +128,7 @@ class mover:
 		self.sp = graus/15
 		while(self.pDir < self.sp):
 			#GPIO.output(en,GPIO.HIGH)
-			self.pwmEsq.ChangeDutyCycle(50)
+			self.pwmEsq.ChangeDutyCycle(60)
 			GPIO.output(self.in1,GPIO.LOW)
 			GPIO.output(self.in2,GPIO.HIGH)
 		#print(self.sp)
@@ -143,7 +143,7 @@ class mover:
 		self.sp = graus/15
 		while(self.pEsq < self.sp):
 			#GPIO.output(en,GPIO.HIGH)
-			self.pwmDir.ChangeDutyCycle(50)
+			self.pwmDir.ChangeDutyCycle(60)
 			GPIO.output(self.in3,GPIO.LOW)
 			GPIO.output(self.in4,GPIO.HIGH)
 		#print(self.sp)
