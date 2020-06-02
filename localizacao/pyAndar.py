@@ -21,7 +21,7 @@ class mover:
 		GPIO.setup(self.enA,GPIO.OUT)
 		GPIO.setup(self.enB,GPIO.OUT)
 		
-		self.pwmEsq = GPIO.PWM(2,100)
+		self.pwmEsq = GPIO.PWM(18,100)
 		self.pwmEsq.start(0)
 		self.pwmDir = GPIO.PWM(25,100)
 		self.pwmDir.start(0)
