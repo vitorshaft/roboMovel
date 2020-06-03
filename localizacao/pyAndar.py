@@ -46,11 +46,14 @@ class mover:
 		
 	def esquerda(self,vazio):
 		if GPIO.input(self.encEsq):
-			print ("esquerdo: ",self.contadorE())
+			#print ("esquerdo: ",self.contadorE())
+			return self.contadorE()
+			#pass
 	def direita(self,vazio):
 		if GPIO.input(self.encDir):
-			print ("direito: ",self.contadorD())
-	
+			#print ("direito: ",self.contadorD())
+			return self.contadorD()
+			#pass
 	def esq(self,d):
 		self.setPoint = d/15
 		while(self.pDir <= self.setPoint):
@@ -83,9 +86,12 @@ class mover:
 		self.pDir = 0
 		self.sp = d/3	#cada pulso desloca o robo 3 cm
 		#print(self.sp)
-		while(self.pEsq < self.sp or self.pDir < self.sp):
-			self.pwmDir.ChangeDutyCycle(50)
-			self.pwmEsq.ChangeDutyCycle(60)
+		while not(self.pEsq > self.sp and self.pDir > self.sp):
+			#prop = float(self.pDir+1)/float(self.pEsq+1)
+			#print(prop)
+			self.pwmDir.ChangeDutyCycle(80)
+			self.pwmEsq.ChangeDutyCycle(70)
+			#self.pwmEsq.ChangeDutyCycle(prop*80)
 			#print(self.pEsq,self.pDir)
 			GPIO.output(self.in1,GPIO.LOW)
 			GPIO.output(self.in2,GPIO.HIGH)
@@ -128,7 +134,7 @@ class mover:
 		self.sp = graus/15
 		while(self.pDir < self.sp):
 			#GPIO.output(en,GPIO.HIGH)
-			self.pwmEsq.ChangeDutyCycle(60)
+			self.pwmEsq.ChangeDutyCycle(80)
 			GPIO.output(self.in1,GPIO.LOW)
 			GPIO.output(self.in2,GPIO.HIGH)
 		#print(self.sp)
@@ -143,7 +149,7 @@ class mover:
 		self.sp = graus/15
 		while(self.pEsq < self.sp):
 			#GPIO.output(en,GPIO.HIGH)
-			self.pwmDir.ChangeDutyCycle(60)
+			self.pwmDir.ChangeDutyCycle(80)
 			GPIO.output(self.in3,GPIO.LOW)
 			GPIO.output(self.in4,GPIO.HIGH)
 		#print(self.sp)

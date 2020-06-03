@@ -11,6 +11,7 @@ class contorno:
 		self.obs = self.obs[:-1].split(',')
 		for item in range(len(self.obs)):
 			self.obs[item] = int(self.obs[item])
+		self.texto.close()
 		return self.obs
 	def pontosObs(self,lista,pRobo,pObj):	#lista[Xi,Yi,Xf,Yf],pRobo[sen,cos,x,y,teta],pObj[x,y]
 		import numpy as np

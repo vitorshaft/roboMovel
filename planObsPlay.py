@@ -4,6 +4,11 @@ import localizacao.locRoboP3 as lugar
 import plan.desvio
 import time
 import math
+''' O ROBO PRECISA PARTIR DE [0,0] A CADA DESLOCAMENTO
+A POSICAO DO OBSTACULO AINDA E ABSOLUTA. UMA MANOBRA
+COM MESMA DIRECAO QUE UMA PARTINDO DA ORIGEM GERA UMA
+"TRAJETORIA FANTASMA"
+'''
 
 x = andar.mover()
 p = rota.plan()
@@ -29,16 +34,19 @@ for i in intersec:
 try:
 	pi = intersec[h.index(min(h))]
 	pf = intersec[h.index(max(h))]
+	'''
 except:
 	pi = [pRobo[2],pRobo[3]] #caso a rota nao intercepte o obstaculo
 	pf = [pObj[0],pObj[1]] #pi e a posicao do robo e pf a do objetivo
 	obs = [pRobo[2],pRobo[3],pObj[0],pObj[1]]
-	
-if (pi[0] < pi[1]):
-	roteiro = [pi,[obs[0],obs[3]],pf,[xis,ips]]	#arrodeia pelo lado mais curto
-else:
-	roteiro = [pi,[obs[2],obs[1]],pf,[xis,ips]]
-	
+	'''
+	if (pi[0] < pi[1]):
+		roteiro = [pi,[obs[0],obs[3]],pf,[xis,ips]]	#arrodeia pelo lado mais curto
+	else:
+		roteiro = [pi,[obs[2],obs[1]],pf,[xis,ips]]
+except:
+	roteiro = [[xis,ips]]
+
 #while(True):
 for item in range(len(roteiro)):
 	pRobo = coor.readLoc(arquivoRobo) #[seno,cos,x,y,teta]	#posicao atual do Robo
@@ -50,12 +58,13 @@ for item in range(len(roteiro)):
 	xis = roteiro[item][0]
 	ips = roteiro[item][1]
 	dPolar = p.traj(xis,ips,xR,yR) #[angulo,dist]
+	print ("indo a posicao  %d , %d"%(xis,ips))
 	print ("virando para %d graus e andando %d cm"%(dPolar[0],dPolar[1]))
 	print(dPolar[0]-teta)
 	if (dPolar[0]-teta > 0):
-		x.esqRad(dPolar[0]-teta)
+		x.esqRad(int(dPolar[0]-teta))
 	elif (dPolar[0]-teta < 0):
-		x.dirRad((dPolar[0]-teta)*-1)
+		x.dirRad(int((dPolar[0]-teta)*-1))
 	x.parar()
 	time.sleep(1)
 	x.frente(dPolar[1])
@@ -64,7 +73,8 @@ for item in range(len(roteiro)):
 	cos = math.cos(math.radians(dPolar[0]))
 	coor.writeLoc(arquivoRobo,xis,ips,sen,cos,dPolar[0]) #(arq,x,y,sen,cos,teta)
 	time.sleep(1)
+	'''
 	s = input("Entre S para sair: ")
 	if s == "s":
 		break
-
+	'''
