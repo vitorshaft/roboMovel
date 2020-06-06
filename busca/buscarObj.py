@@ -30,8 +30,8 @@ class buscar:
 		self.cosseno = self.atual[1]
 		self.xR = self.atual[2]
 		self.yR = self.atual[3]
-		self.xO = (D*self.cosseno)+self.xR
-		self.yO = (D*self.seno)+self.yR
+		self.xO = (D*self.cosseno)+self.xR #X do obj
+		self.yO = (D*self.seno)+self.yR #Y do Obj
 		self.plotar.writeObj('locObj.json',self.xO,self.yO)
 		return [self.xO,self.yO]
 		
