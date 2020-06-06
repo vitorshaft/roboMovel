@@ -7,7 +7,7 @@ class mover:
 		self.in4 = 23
 		self.in1 = 21
 		self.in2 = 20
-		self.enB = 25
+		self.enB = 12
 		self.enA = 18
 		self.encEsq = 17
 		self.encDir = 27
@@ -23,7 +23,7 @@ class mover:
 		
 		self.pwmEsq = GPIO.PWM(18,100)
 		self.pwmEsq.start(0)
-		self.pwmDir = GPIO.PWM(25,100)
+		self.pwmDir = GPIO.PWM(12,100)
 		self.pwmDir.start(0)
 		GPIO.setup(self.encEsq,GPIO.IN)
 		GPIO.setup(self.encDir,GPIO.IN)
