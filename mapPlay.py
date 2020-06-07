@@ -32,23 +32,24 @@ mv.esqAx(180)
 sleep(1)
 '''
 #caso não tenha obs em 100 mm, seguir em frente até detectar obs
+'''
 def seguir():
 	if ls.dLaser() > 100:
 		d = mv.frenteLendo(60)	#armazena distancia andada enquanto frenteLendo(%PWM)
 	else:
 		mv.frenteLendo(0)
 	return (d)
-
+'''
 def mapear ():
-	pRobo = loc.readLoc(arqRobo)
-	dObs = ls.dLaser()
+	pRobo = loc.readLoc(arqRobo)	#le a pos do robo
+	dObs = ls.dLaser()	#mede a distancia
 	relObs = cv.polarCart(pRobo[4],dObs)	#posicao do obs relativa ao robo
-	absObs = [pRobo[2]+relObs[2],pRobo[3]+relObs[3]]	#posicao do obs absoluta
-	guardar = open(amb,'a')
-	guardar.write(str(absObs)+'\n')
-	print(dObs,absObs)
+	absObs = [int(pRobo[2]+relObs[2]),int(pRobo[3]+relObs[3])]	#posicao do obs absoluta
+	guardar = open(amb,'a')	#abre arquivo txt de obstaculos
+	guardar.write(str(absObs)+'\n')	#salva ponto detectado
+	print(dObs,relObs,absObs)	#printa distancia e pos absoluta do obstaculo
 	
-
+'''
 def slam():
 	inicialR = loc.readLoc(arqRobo)	#[sen,cos,x,y,teta]
 	finalR = cv.polarCart(inicialR[4],seguir())	#[sen,cos,x,y]
@@ -60,5 +61,9 @@ def slam():
 	
 	dObs = ls.dLaser()
 	loc.writeLoc(arqRobo,xR,yR,sR,cR,tetaR)
-
-mapear()
+'''
+for i in range(9):
+	mapear()
+	pR = loc.readLoc(arqRobo) #[sen,cos,x,y,teta]
+	mv.dirRad(10)
+	loc.writeLoc(arqRobo,pR[2],pR[3],pR[0],pR[1],pR[4]-10)

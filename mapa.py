@@ -10,15 +10,20 @@ pR = coor.readLoc(arquivoRobo)
 #obs = cont.lerObs('/home/pi/roboMovel/plan/obs.txt')
 abrir = open('/home/pi/roboMovel/ambiente.txt','r')
 k = abrir.readlines()
+j = []
+for item in k:
+	m = item.split(',')
+	j.append([m[0][1:],m[1][:-3]])
 obs = []
-for i in range(len(k)):
-	obs.append([int(k[i][1:3]),int(k[i][4:6])])
 
-foto = np.ones((300,400,3), np.uint8)
+for i in j:
+	obs.append([int(i[0]),int(i[1])])
 
-cv2.circle(foto,(int(pR[2]),int(pR[3])),16,(204,204,0),2) #robo em azul
+foto = np.ones((2700,2700,3), np.uint8)
+
+cv2.circle(foto,(int(pR[2]),int(pR[3])),160,(204,204,0),2) #robo em azul
 for item in obs:
-	cv2.circle(foto,(item[0],item[1]),1,(0,0,250),2)
+	cv2.circle(foto,(item[0],item[1]),5,(0,0,250),5)
 '''
 cv2.rectangle(foto,(obs[0], obs[1]),(obs[2],obs[3]),(200,200,200),2) #obstaculo em cinza claro
 cv2.line(foto,(0,0),(27,20),(0,0,250),2)
