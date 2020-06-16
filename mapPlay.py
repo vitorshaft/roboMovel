@@ -12,6 +12,9 @@ from time import sleep
 3.1 Salvar posicao do robo (x,y,alfa) e distancia 
 4. Converte pos/dist em posicao cartesiana de obs
 5. Salva posicoes em arquivo txt separadas por linha e agrupadas em listas
+
+Mindstorm:
+- Checar obstáculo a frente: if(dist obstáculo < 1000): parar, andar dist, virar 90 graus, repete
 '''
 #objetos
 ls = laser.laser()

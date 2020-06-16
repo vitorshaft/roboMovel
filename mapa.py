@@ -13,7 +13,7 @@ k = abrir.readlines()
 j = []
 for item in k:
 	m = item.split(',')
-	j.append([m[0][1:],m[1][:-3]])
+	j.append([m[0][1:],m[1][:-2]])
 obs = []
 
 for i in j:
@@ -21,9 +21,10 @@ for i in j:
 
 foto = np.ones((2700,2700,3), np.uint8)
 
-cv2.circle(foto,(int(pR[2]),int(pR[3])),160,(204,204,0),2) #robo em azul
+cv2.circle(foto,(int(pR[2]),int(pR[3])),60,(204,204,0),2) #robo em azul
 for item in obs:
 	cv2.circle(foto,(item[0],item[1]),5,(0,0,250),5)
+	print('ponto em ',item[0],item[1], ' Robo em: ',pR[2],pR[3])
 '''
 cv2.rectangle(foto,(obs[0], obs[1]),(obs[2],obs[3]),(200,200,200),2) #obstaculo em cinza claro
 cv2.line(foto,(0,0),(27,20),(0,0,250),2)
