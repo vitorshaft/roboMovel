@@ -82,27 +82,36 @@ class mover:
 		
 	def frenteLendo(self,pc):	#anda frente ad eternum enquanto le dist. pc = PWM
 		#zera os encoders
-		self.pEsq = 0
-		self.pDir = 0
+		#self.pEsq = 0
+		#self.pDir = 0
 		#anda para frente com PWM = pc e retorna maior encoder
+		self.pwmDir.ChangeDutyCycle(pc)
+		self.pwmEsq.ChangeDutyCycle(pc)
+		GPIO.output(self.in1,GPIO.LOW)
+		GPIO.output(self.in2,GPIO.HIGH)
+		GPIO.output(self.in3,GPIO.LOW)
+		GPIO.output(self.in4,GPIO.HIGH)
+		'''
 		while (True):
-			self.pwmDir.ChangeDutyCycle(pc)
-			self.pwmEsq.ChangeDutyCycle(pc)
-			GPIO.output(self.in1,GPIO.LOW)
-			GPIO.output(self.in2,GPIO.HIGH)
-			GPIO.output(self.in3,GPIO.LOW)
-			GPIO.output(self.in4,GPIO.HIGH)
 			#retorna a distancia percorrida baseada na maior leitura entre os encoders
-			return (max(self.pEsq,self.pDir)*3)
+			a = max(self.pEsq,self.pDir)*3
+			print (a)
+			return (a)
 			if (pc == 0):
 				break
-		print("parada")
-		self.pwmEsq.ChangeDutyCycle(0)
-		self.pwmDir.ChangeDutyCycle(0)
-		GPIO.output(self.in1,GPIO.HIGH)
-		GPIO.output(self.in2,GPIO.HIGH)
-		GPIO.output(self.in3,GPIO.HIGH)
-		GPIO.output(self.in4,GPIO.HIGH)
+		'''
+		a = max(self.pEsq,self.pDir)*3
+		#print (a)
+		if (pc == 0):
+			print("parada")
+			self.pwmEsq.ChangeDutyCycle(0)
+			self.pwmDir.ChangeDutyCycle(0)
+			GPIO.output(self.in1,GPIO.HIGH)
+			GPIO.output(self.in2,GPIO.HIGH)
+			GPIO.output(self.in3,GPIO.HIGH)
+			GPIO.output(self.in4,GPIO.HIGH)
+		while (pc != 0):
+			return(a)
 		
 	def frente(self,d):	#distancia em cm
 		#global self.pEsq
@@ -189,6 +198,7 @@ class mover:
 		GPIO.output(self.in2,GPIO.HIGH)
 		GPIO.output(self.in3,GPIO.HIGH)
 		GPIO.output(self.in4,GPIO.HIGH)
+		self.frenteLendo(0)
 		
 		
 
