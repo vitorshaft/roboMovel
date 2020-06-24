@@ -9,4 +9,7 @@ class laser:
 		#self.sensor.measurement_timing_budget = 200000 #mais preciso: 200 ms
 	def dLaser(self):
 		self.distLaser = self.sensor.range
+		pub = open('/home/pi/roboMovel/laserTopic.txt','w')
+		pub.write(str(self.distLaser))
+		pub.close()
 		return self.distLaser

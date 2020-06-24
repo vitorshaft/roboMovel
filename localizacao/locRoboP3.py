@@ -16,12 +16,12 @@ class loc:
 			self.x = self.DB[0]['px']
 			self.y = self.DB[0]['py']
 			self.teta = self.DB[0]['teta']
-			print ("posicao inicial: ",self.x,self.y,self.teta)
+			#print ("posicao inicial: ",self.x,self.y,self.teta)
 			return [self.seno,self.cosseno,self.x,self.y,self.teta]
 
 	def writeLoc(self,arq,x,y,sen,cos,teta):
 		self.dados['loc'][0] = {"sen": sen, "cos": cos, "px": x, "py": y, "teta": teta}
 		#print (self.dados['loc'][0])
-		print ("posicao final: ",x,y,teta)
+		#print ("posicao final: ",x,y,teta)
 		with open(arq,'w') as BD:
 			json.dump(self.dados,BD)

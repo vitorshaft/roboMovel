@@ -20,11 +20,14 @@ for i in j:
 	obs.append([int(i[0]),int(i[1])])
 
 foto = np.ones((2700,2700,3), np.uint8)
+#foto = cv2.imread('mapa.jpg')
 
 cv2.circle(foto,(int(pR[2]),int(pR[3])),60,(204,204,0),2) #robo em azul
 for item in obs:
 	cv2.circle(foto,(item[0],item[1]),5,(0,0,250),5)
 	print('ponto em ',item[0],item[1], ' Robo em: ',pR[2],pR[3])
+	
+	#FALTA SALVAR OS PONTOS EM QUE O ROBO FEZ SCAN E SALVAR E GERAR O MAPA A PARTIR DELES
 '''
 cv2.rectangle(foto,(obs[0], obs[1]),(obs[2],obs[3]),(200,200,200),2) #obstaculo em cinza claro
 cv2.line(foto,(0,0),(27,20),(0,0,250),2)
