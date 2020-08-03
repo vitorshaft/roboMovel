@@ -10,6 +10,6 @@ class laser:
 	def dLaser(self):
 		self.distLaser = self.sensor.range
 		pub = open('/home/pi/roboMovel/laserTopic.txt','w')
-		pub.write(str(self.distLaser))
+		pub.write(str(self.distLaser/10))
 		pub.close()
 		return self.distLaser

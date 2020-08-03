@@ -60,12 +60,31 @@ def mapear ():
 def slam():	#para ser usada com while
 
 	inicialR = loc.readLoc(arqRobo)	#[sen,cos,x,y,teta]
-	dObs = ls.dLaser()/10	#mede distancia ate obs, converte em cm
-	if (dObs < 80):	#caso detecte alguma coisa em menos de 1 m
+	dObs = ls.dLaser()	#mede distancia ate obs, converte em mm
+	while (dObs > 800):
+		print("nada detectado")
+		sleep(1)
+		mv.frenteLendo(70)		#guarda distancia percorrida
+		sleep(1)
+		#atualR = max(mv.pEsq,mv.pDir)*3	#encoder direito descalibrado
+		atualR = mv.pEsq*3
+		ang = inicialR[4]	#angulo (permanece)
+		finalR = cv.polarCart(ang,atualR)	# converte polar em cartesiano(angulo, distancia). Retorna [sen,cos,x,y]
+		
+		xR = inicialR[2]+finalR[2]	#transformada de X do Robo
+		yR = inicialR[3]+finalR[3]	#transformada de Y do Robo
+		sR = finalR[0]	#seno
+		cR = finalR[1]	#cosseno
+		
+		loc.writeLoc(arqRobo,xR,yR,sR,cR,ang)
+		mv.parar()
+		dObs = ls.dLaser()
+		
+	if (dObs < 800):	#caso detecte alguma coisa em menos de 1 m
 		mv.parar()	#para
 		print("andando ate o obstaculo")
 		sleep(1)	#espera 1s
-		mv.frente(dObs - 15)	#anda ate 15 cm do obstaculo
+		mv.frente((dObs/10) - 15)	#anda ate 15 cm do obstaculo
 		print("escaneando 180 pela Esq")
 		sleep(1)	#espera mais 1s
 		mv.parar()	#para novamente
@@ -90,25 +109,21 @@ def slam():	#para ser usada com while
 			ang = ang-90
 			if ang < 0:
 				ang = 360+ang
-		atualR = dObs-15	#atualiza distancia percorrida
-	else:	#caso nao detecte obs em 1 metro
-		print("nada detectado")
-		sleep(1)
-		mv.frenteLendo(70)		#guarda distancia percorrida
-		atualR = max(mv.pEsq,mv.pDir)*30
-		ang = inicialR[4]	#angulo (permanece)
-	finalR = cv.polarCart(ang,atualR)	# converte polar em cartesiano(angulo, distancia). Retorna [sen,cos,x,y]
-		
-	xR = inicialR[2]+finalR[2]	#transformada de X do Robo
-	yR = inicialR[3]+finalR[3]	#transformada de Y do Robo
-	sR = finalR[0]	#seno
-	cR = finalR[1]	#cosseno
+		atualR = dObs-150	#atualiza distancia percorrida
 	
-	loc.writeLoc(arqRobo,xR,yR,sR,cR,ang)
-	fixo = open(fixos,'a')
-	fixo.write(str(int(xR))+','+str(int(yR))+'\n')
-	fixo.close()
-	mv.parar()
+		finalR = cv.polarCart(ang,atualR)	# converte polar em cartesiano(angulo, distancia). Retorna [sen,cos,x,y]
+			
+		xR = inicialR[2]+finalR[2]	#transformada de X do Robo
+		yR = inicialR[3]+finalR[3]	#transformada de Y do Robo
+		sR = finalR[0]	#seno
+		cR = finalR[1]	#cosseno
+		
+		loc.writeLoc(arqRobo,xR,yR,sR,cR,ang)
+		fixo = open(fixos,'a')
+		fixo.write(str(int(xR))+','+str(int(yR))+'\n')
+		fixo.close()
+		mv.parar()
+		print("scan no fixo [%d ; %d]"%(int(xR),int(yR)))
 	
 #OLHAR MAPA.JPG ANTES DE CONTINUAR
 #os.system("python3 monitorCam.py")
