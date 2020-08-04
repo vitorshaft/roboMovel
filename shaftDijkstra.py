@@ -7,6 +7,7 @@ tamRobo = 30	#maior dimensao 2D do robo em cm
 S = [10,10]	#coordenadas do inicio
 G = [150,150]	#coordenadas do objetivo
 arqMapa = 'mapa.jpg'	#arquivo JPG com o mapa de obstaculos
+arqVert = 'grafo_'+str(S[0])+'_'+str(S[1])+'_a'+str(G[0])+'_'+str(G[1])+'.txt'
 
 class no:
 	def __init__(self,ind,x,y):
@@ -25,56 +26,12 @@ class aresta:
 		self.p2 = v2
 		self.tam = math.hypot(co,ca)
 		self.ind = None
-
+"""
 def mostrar(imagem):
 	cv2.imshow("imagem",imagem)
 	cv2.waitKey(0)
 	cv2.destroyAllWindows()
-
-def vertices(inicio,imagem,obj):
-	#parametros de deteccao de borda:
-	inf = 0 
-	sup = 255
-	ker = 5
-	#arquivo de imagem do mapa
-	img = cv2.imread(imagem)
-	#matriz imagem apenas com bordas dos obs detectados:
-	bordas = cv2.Canny(img,inf,sup,ker)
-	#lista para conter pontos das bordas
-	pontos = []
-	lados = np.where(bordas == 255)	#coleta coordenadas dos pixels das bordas
-	#coordenadas iniciais e finais dos obstaculos
-	menorX = min(lados[1])
-	maiorX = max(lados[1])
-	menorY = min(lados[0])
-	maiorY = max(lados[0])
-	#vertices comecam com menor X e menor Y
-	vert = [inicio,[menorY,menorX]]
-	#itera com base na quantidade de pontos. n(X) = n(Y)
-	pontos = zip(lados[1], lados[0])	#insere em lista de pontos [[x1,y1],[xn,yn]]
-	#pontos = list(set(list(pontos)))
-	pontos = list(pontos)
-	for item in range(len(lados[0])):		
-		#se a distancia em X ou em Y ate o primeiro vertice for maior q o robo:
-		if (pontos[item][0]-menorX > tamRobo) or (pontos[item][1]-menorY > tamRobo):
-			vert.append(pontos[item])	#acrescenta ponto a lista de vertices
-			#marca vertice atual como referencia (medir dist ate o proximo ponto (>tamRobo))
-			menorX = pontos[item][0]	
-			menorY = pontos[item][1]
-	#vertices terminam com maior X e maior Y
-	vert.append([maiorY,maiorX])
-	vert.append(obj)
-	"""
-	for item in vert:
-		cv2.circle(bordas,(item[0],item[1]),5,255,5)
-		xis = str(item[0])
-		ips = str(item[1])
-		tudo = '('+xis+', '+ips+')'
-		cv2.putText(bordas,tudo, (item[0],item[1]),cv2.FONT_HERSHEY_PLAIN, 1, 255,2)
-	mostrar(bordas)
-	"""
-	return vert	#retorna lista de coordenadas dos vertices: vert = [[x1,y1],[x2,y2],[xn,yn]]
-
+"""
 def edges(imagem,lista):	#lista de vertices[[x1,y1],[xn,yn]]
 	arestas = []
 	solidos = cv2.imread(imagem)	#matriz imagem do mapa de obstaculos
@@ -110,8 +67,17 @@ def edges(imagem,lista):	#lista de vertices[[x1,y1],[xn,yn]]
 
 #vertices([10,10],'mapa.jpg',[150,150])
 
-nodes = vertices(S,arqMapa,G)
+#nodes = vertices(S,arqMapa,G)
 #grafo = [nodes[0]]
+nodes = []
+a = open(arqVert,'r')
+b = a.read()
+a.close()
+c = b.split('\n')
+for item in c:
+	e = item[1:-1].split(', ')
+	nodes.append([int(e[0]),int(e[1])])
+
 grafo = []	#inicia lista de nos
 #i = 1
 #cria lista de objetos (nos)
@@ -132,7 +98,7 @@ for a in edg:	#a cada aresta temos dois nos
 			ad = nodes.index(a.p1)
 			n.noAdj.append(grafo[ad])	#adiciona o p1 com o adjacente de p2
 
-"""PSEUDOCODIGO"""
+"""DIJKSTRA"""
 for n in grafo:
 	n.dist = sys.maxsize
 nv = []
