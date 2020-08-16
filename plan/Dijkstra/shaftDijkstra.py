@@ -5,10 +5,16 @@ import sys
 import json
 
 tamRobo = 30	#maior dimensao 2D do robo em cm
-S = [10,10]	#coordenadas do inicio
-G = [240,60]	#coordenadas do objetivo
+#S = [10,10]	#coordenadas do inicio
+#G = [240,60]	#coordenadas do objetivo
 #arqMapa = 'mapa.jpg'	#arquivo JPG com o mapa de obstaculos
 #arqVert = 'grafo_'+str(S[0])+'_'+str(S[1])+'_a'+str(G[0])+'_'+str(G[1])+'.txt'
+
+entrada = input('insira os pontos de inicio e obj separados por espaco: ')
+pts = entrada.split(' ')
+S = [int(pts[0]),int(pts[1])]
+G = [int(pts[2]),int(pts[3])]
+
 gf = 'grafo.json'
 
 class no:
@@ -34,11 +40,15 @@ def mostrar(imagem):
 	cv2.waitKey(0)
 	cv2.destroyAllWindows()
 """
-with open(gf) as jsonFile:
-	data = json.load(jsonFile)
-	nodes = data['vertices']
-	d = data['arestas']
-	rotas = d['arestas']
+try:
+	
+	with open(gf) as jsonFile:
+		data = json.load(jsonFile)
+		nodes = data['vertices']
+		d = data['arestas']
+		rotas = d['arestas']
+except:
+	print("Grafo nao encontrado, execute python mapa_em_grafo.py <mapa.extensao>")
 #print(rotas)
 	
 #vertices([10,10],'mapa.jpg',[150,150])
@@ -121,11 +131,17 @@ for v in grafo[1:]:
 	nAnt = v.anterior
 	try:
 		#print(nAnt.coord)
-		caminho.append(nAnt.coord)
+		if nAnt.coord != S:
+			caminho.append(nAnt.coord)
 	except:
 		#print(nAnt)
 		pass
-print(caminho[:-1])
+#print(caminho[:-1])
+#caminho = list(dict.fromkeys(caminho))
+for item in caminho:
+	for i in range(caminho.count(item)-1):
+		caminho.remove(item)
+print("nos entre S e G: ",caminho)
 
 """ BUG na checagem de vertices anteriores (para gerar um caminho):
 	Varios vertices tem a propria origem [10,10] como anterior.

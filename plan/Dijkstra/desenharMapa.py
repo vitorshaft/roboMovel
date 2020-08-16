@@ -12,5 +12,6 @@ def plotarObs(x,y,X,Y):
 				if col >= x and col <= X:
 					mapa.itemset((linha,col),255)
 plotarObs(60,0,220,90)
+plotarObs(0,180,160,270)
 plotarObs(180,180,265,265)
 cv2.imwrite("mapa.jpg",mapa)

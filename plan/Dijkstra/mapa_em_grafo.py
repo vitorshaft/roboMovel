@@ -44,6 +44,7 @@ def vertices(inicio,imagem,obj):
 	inf = 0 
 	sup = 255
 	ker = 5
+	espaco = 10	#espaco minimo entre vertices
 	#arquivo de imagem do mapa
 	img = cv2.imread(imagem)
 	#matriz imagem apenas com bordas dos obs detectados:
@@ -62,9 +63,9 @@ def vertices(inicio,imagem,obj):
 	pontos = zip(lados[1], lados[0])	#insere em lista de pontos [[x1,y1],[xn,yn]]
 	#pontos = list(set(list(pontos)))
 	pontos = list(pontos)
-	for item in range(len(lados[0])):		
+	for item in range(len(lados[0])):	 #iteracao por quantidade de X	
 		#se a distancia em X ou em Y ate o primeiro vertice for maior q o robo:
-		if (pontos[item][0]-menorX > tamRobo) or (pontos[item][1]-menorY > tamRobo):
+		if (pontos[item][0]-menorX > espaco) or (pontos[item][1]-menorY > espaco):
 			vert.append(pontos[item])	#acrescenta ponto a lista de vertices
 			#marca vertice atual como referencia (medir dist ate o proximo ponto (>tamRobo))
 			menorX = pontos[item][0]	
@@ -99,10 +100,10 @@ def edges(imagem,lista):	#lista de vertices[[x1,y1],[xn,yn]]
 			#calcula distancia linear entre v1 e v2
 			dist = int(math.hypot(dX,dY))
 			#discretizacao dos pontos da linha v1/v2 (10 pontos)
-			passoX = dX/10
-			passoY = dY/10
+			passoX = dX/20
+			passoY = dY/20
 			#faz 10 plotagens ao longo da linha e checa se a linha intercepta obstaculo
-			for a in range(10):
+			for a in range(20):
 				#	coleta valor do pixel na posicao v1 mais 1 passo:
 				amostra = solidos[v1[1]+(a*int(passoY)),v1[0]+(a*int(passoX))][0]
 				#am = solidos[v1[0]+(a*int(passoX)),v1[1]+(a*int(passoY))]
