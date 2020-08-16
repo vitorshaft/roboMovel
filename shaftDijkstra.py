@@ -1,13 +1,15 @@
-import cv2
+#import cv2
 import numpy as np
 import math
 import sys
+import json
 
 tamRobo = 30	#maior dimensao 2D do robo em cm
 S = [10,10]	#coordenadas do inicio
-G = [150,150]	#coordenadas do objetivo
-arqMapa = 'mapa.jpg'	#arquivo JPG com o mapa de obstaculos
-arqVert = 'grafo_'+str(S[0])+'_'+str(S[1])+'_a'+str(G[0])+'_'+str(G[1])+'.txt'
+G = [240,60]	#coordenadas do objetivo
+#arqMapa = 'mapa.jpg'	#arquivo JPG com o mapa de obstaculos
+#arqVert = 'grafo_'+str(S[0])+'_'+str(S[1])+'_a'+str(G[0])+'_'+str(G[1])+'.txt'
+gf = 'grafo.json'
 
 class no:
 	def __init__(self,ind,x,y):
@@ -32,43 +34,18 @@ def mostrar(imagem):
 	cv2.waitKey(0)
 	cv2.destroyAllWindows()
 """
-def edges(imagem,lista):	#lista de vertices[[x1,y1],[xn,yn]]
-	arestas = []
-	solidos = cv2.imread(imagem)	#matriz imagem do mapa de obstaculos
-	#para cada vertice:
-	for v1 in lista:
-		#pega distancias entre vertices em X e Y
-		for v2 in lista:
-			dX = v2[0]-v1[0]
-			dY = v2[1]-v1[1]
-			#calcula distancia linear entre v1 e v2
-			dist = int(math.hypot(dX,dY))
-			#discretizacao dos pontos da linha v1/v2 (10 pontos)
-			passoX = dX/10
-			passoY = dY/10
-			#faz 10 plotagens ao longo da linha e checa se a linha intercepta obstaculo
-			for a in range(10):
-				#print(solidos[v1[0]+(a*int(passoX)),v1[1]+(a*int(passoY))])
-				if solidos[v1[0]+(a*int(passoX)),v1[1]+(a*int(passoY))][0] == 255:
-				#se o segmento partindo de v1 interceptar, distancia = infinita
-					dist = sys.maxsize
-			if dist != 1000000000 and dist != 0:
-				ar = aresta(v1,v2)
-				try:
-					ra = aresta(v2,v1)
-					ind = arestas.index(ra)
-					arestas.pop(ind)
-				except:
-					pass
-				arestas.append(ar)
-	for a in arestas:
-		a.ind = arestas.index(a)
-	return arestas	#arestas = [
-
+with open(gf) as jsonFile:
+	data = json.load(jsonFile)
+	nodes = data['vertices']
+	d = data['arestas']
+	rotas = d['arestas']
+#print(rotas)
+	
 #vertices([10,10],'mapa.jpg',[150,150])
 
 #nodes = vertices(S,arqMapa,G)
 #grafo = [nodes[0]]
+'''
 nodes = []
 a = open(arqVert,'r')
 b = a.read()
@@ -77,7 +54,7 @@ c = b.split('\n')
 for item in c:
 	e = item[1:-1].split(', ')
 	nodes.append([int(e[0]),int(e[1])])
-
+'''
 grafo = []	#inicia lista de nos
 #i = 1
 #cria lista de objetos (nos)
@@ -86,7 +63,14 @@ for item in range(len(nodes)):
 	n = no(item,nodes[item][0],nodes[item][1])
 	grafo.append(n)
 
-edg = edges(arqMapa,nodes)	#cria lista de arestas entre os nos do grafo
+edg = []	#inicia lista de objetos aresta()
+
+#print(rotas[0][0])
+for ar in range(len(rotas)):
+	arst = aresta(rotas[ar][0], rotas[ar][1])
+	edg.append(arst)
+
+#edg = edges(arqMapa,nodes)	#cria lista de arestas entre os nos do grafo
 
 #gerar nos adjacentes:
 for a in edg:	#a cada aresta temos dois nos
@@ -97,6 +81,8 @@ for a in edg:	#a cada aresta temos dois nos
 		elif n.coord == a.p2:	#mas se o no coincidir com o p2...
 			ad = nodes.index(a.p1)
 			n.noAdj.append(grafo[ad])	#adiciona o p1 com o adjacente de p2
+#for n in grafo:
+	#print(n.noAdj)
 
 """DIJKSTRA"""
 for n in grafo:
@@ -110,40 +96,38 @@ s.dist = 0
 for n in grafo:
 	if n.visitado == False:
 		nv.append(n)
-while nv != []:
-	atual = no(sys.maxsize,sys.maxsize,sys.maxsize)
-	for noh in nv:
-		if noh.visitado == False and noh.dist < atual.dist:
-			atual = noh
+'''
+for item in grafo:
+	print(item.visitado)
+'''	
+#while nv != []:
+atual = no(sys.maxsize,sys.maxsize,sys.maxsize)
+for noh in nv:
+	if noh.visitado == False: #and noh.dist < atual.dist:
+		atual = noh
+		#print(atual.coord)
 	atual.visitado = True
-	nv.remove(atual)
+	#nv.remove(atual)
+	#print('loop de escolha da menor aresta adj')
 	for adj in atual.noAdj:	#para cada no adjacente ao atual
-		if adj.dist > (atual.dist+aresta(adj.coord,atual.coord).tam):
+		if adj.dist > (atual.dist+aresta(adj.coord,atual.coord).tam) and adj.visitado == False:
 			adj.dist = atual.dist+aresta(adj.coord,atual.coord).tam
 			adj.anterior = atual
-			#lista.append(adj)
-caminho = [grafo[-1]]
-while (True):
-	caminho.append(caminho[0].anterior)
-print(caminho)
+		#lista.append(adj)
+print('gerando caminho')
+caminho = []
 
+for v in grafo[1:]:
+	nAnt = v.anterior
+	try:
+		#print(nAnt.coord)
+		caminho.append(nAnt.coord)
+	except:
+		#print(nAnt)
+		pass
+print(caminho[:-1])
+
+""" BUG na checagem de vertices anteriores (para gerar um caminho):
+	Varios vertices tem a propria origem [10,10] como anterior.
+	Possivel motivo: problema de geracao das arestas em mapa_em_grafo.py
 """
-lista = []
-lista.append(s)
-#while len(lista) != 0:
-
-while lista != []:
-	atual = no(sys.maxsize,sys.maxsize,sys.maxsize)
-	for item in lista:
-		if 	item.dist < atual.dist:
-			atual = item
-	lista.remove(atual)
-
-#for node in grafo:
-#for node in lista:	#a cada no na lista:
-	for adj in atual.noAdj:	#para cada no adjacente ao atual
-		if adj.dist > (node.dist+aresta(adj,node).tam):
-			adj.dist = node.dist+aresta(adj,node).tam
-			lista.append(adj)
-"""
-	
