@@ -118,7 +118,7 @@ class mover:
 		#global self.pDir
 		self.pEsq = 0
 		self.pDir = 0
-		self.sp = d/3	#cada pulso desloca o robo 3 cm
+		self.sp = d/4	#cada pulso desloca o robo 3,75 cm
 		#print(self.sp)
 		while not(self.pEsq > self.sp and self.pDir > self.sp):
 			#prop = float(self.pDir+1)/float(self.pEsq+1)
@@ -144,7 +144,7 @@ class mover:
 		#global self.pDir
 		self.pEsq = 0
 		self.pDir = 0
-		self.sp = d/3	#cada pulso desloca o robo 3 cm
+		self.sp = d/4	#cada pulso desloca o robo 3,75 cm
 		#print(self.sp)
 		while(self.pEsq <= self.sp or self.pDir <= self.sp):
 			self.pwmDir.ChangeDutyCycle(50)
@@ -165,7 +165,7 @@ class mover:
 	def dirRad(self,graus):
 		#global self.pDir
 		self.pDir = 0
-		self.sp = graus/15
+		self.sp = graus/19	#cada passo = 18,75 graus
 		while(self.pDir < self.sp):
 			#GPIO.output(en,GPIO.HIGH)
 			self.pwmEsq.ChangeDutyCycle(80)
@@ -180,7 +180,7 @@ class mover:
 	def esqRad(self,graus):
 		#global self.pEsq
 		self.pEsq = 0
-		self.sp = graus/15
+		self.sp = graus/19 #cada passo = 18,75 graus
 		while(self.pEsq < self.sp):
 			#GPIO.output(en,GPIO.HIGH)
 			self.pwmDir.ChangeDutyCycle(80)
