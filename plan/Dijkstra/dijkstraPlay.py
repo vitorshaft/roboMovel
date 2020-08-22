@@ -16,22 +16,28 @@ p = rota.plan()
 coor = lugar.loc()
 
 arquivoRobo = '/home/pi/roboMovel/locRobo.json'		#json com a localizacao do robo em formato [seno,cos,x,y,teta]
-
-while(True):
-#for item in range(2):
+pRobo = coor.readLoc(arquivoRobo) #[seno,cos,x,y,teta]
+xR = pRobo[2]
+yR = pRobo[3]
+teta = pRobo[4]
+xis = args.objetivoX
+ips = args.objetivoY
+with open('caminho.json') as jsonFile:
+	dados = json.load(jsonFile)
+	inicioObj = '%d %d %d %d'%(xR,yR,xis,ips)
+	caminho = dados[inicioObj]
+	pontos = caminho[inicioObj]
+#while(True):
+for item in range(len(pontos)):
 	pRobo = coor.readLoc(arquivoRobo) #[seno,cos,x,y,teta]
 	xR = pRobo[2]
 	yR = pRobo[3]
 	teta = pRobo[4]
-	xis = args.objetivoX
-	ips = args.objetivoY
-	with open('caminho.json') as jsonFile:
-		dados = json.load(jsonFile)
-		inicioObj = '%d %d %d %d'%(xR,yR,xis,ips)
-		caminho = dados[inicioObj]
-		pontos = caminho[inicioObj]
+	xis = pontos[item][0]
+	ips = pontos[item][1]
+	
 	""" INSERIR INTERACAO COM MOVIMENTO PARA CADA VALOR EM pontos"""
-	is,ips,xR,yR) #[angulo,dist]
+	dPolar = p.traj(xis,ips,xR,yR) #[angulo,dist]
 	print ("virando para %d graus e andando %d cm"%(dPolar[0],dPolar[1]))
 	print(dPolar[0]-teta)
 	if (dPolar[0]-teta > 0):
