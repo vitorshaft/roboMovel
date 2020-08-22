@@ -135,7 +135,7 @@ def edges(imagem,lista):	#lista de vertices[[x1,y1],[xn,yn]]
 
 v = vertices(inicio, jpg,obj)
 vt = v
-for item in v:
+for item in v:	#reordenando vertices
 	vt[v.index(item)] = list(item)
 #grafo['vertices'] = {'vertices':vt}
 grafo['vertices'] = vt

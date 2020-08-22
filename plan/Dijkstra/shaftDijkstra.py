@@ -142,8 +142,9 @@ for item in caminho:
 	for i in range(caminho.count(item)-1):
 		caminho.remove(item)
 print("nos entre S e G: ",caminho)
-
-""" BUG na checagem de vertices anteriores (para gerar um caminho):
-	Varios vertices tem a propria origem [10,10] como anterior.
-	Possivel motivo: problema de geracao das arestas em mapa_em_grafo.py
-"""
+rotas = {}
+rotas[entrada] = [0]
+rotas[entrada] = {entrada:caminho}
+with open('caminho.json','w') as BD:
+	json.dump(rotas,BD)
+	BD.close()
