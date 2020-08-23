@@ -3,7 +3,7 @@ import math
 class plan:
 	def __init__(self):
 		pass
-	def traj(self,xo,yo,xr,yr):
+	def traj(self,xo,yo,xr,yr):	#retorna angulo e distancia para deslocamento em linha reta
 		self.dx = float(xo-xr)
 		self.dy = float(yo-yr)
 		try:

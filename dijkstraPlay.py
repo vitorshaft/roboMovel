@@ -4,6 +4,8 @@ import localizacao.locRoboP3 as lugar
 import time
 import math
 import argparse
+import json
+import os
 
 ap = argparse.ArgumentParser(description= '(x,y) do objetivo')
 ap.add_argument(	'objetivoX', type=int, help= 'entre com as coordenadas do objetivo separadas por espaco')
@@ -16,17 +18,23 @@ p = rota.plan()
 coor = lugar.loc()
 
 arquivoRobo = '/home/pi/roboMovel/locRobo.json'		#json com a localizacao do robo em formato [seno,cos,x,y,teta]
+caminhoJson = '/home/pi/roboMovel/plan/Dijkstra/caminho.json'
+
 pRobo = coor.readLoc(arquivoRobo) #[seno,cos,x,y,teta]
 xR = pRobo[2]
 yR = pRobo[3]
 teta = pRobo[4]
 xis = args.objetivoX
 ips = args.objetivoY
-with open('caminho.json') as jsonFile:
+
+os.system('python /home/pi/roboMovel/plan/Dijkstra/mapa_em_grafo.py /home/pi/roboMovel/plan/Dijkstra/mapa.jpg %d %d %d %d'%(xR,yR,xis,ips))
+
+with open(caminhoJson) as jsonFile:
 	dados = json.load(jsonFile)
 	inicioObj = '%d %d %d %d'%(xR,yR,xis,ips)
 	caminho = dados[inicioObj]
 	pontos = caminho[inicioObj]
+pontos.append([xis,ips])
 #while(True):
 for item in range(len(pontos)):
 	pRobo = coor.readLoc(arquivoRobo) #[seno,cos,x,y,teta]
@@ -39,6 +47,7 @@ for item in range(len(pontos)):
 	dPolar = p.traj(xis,ips,xR,yR) #[angulo,dist]
 	print ("virando para %d graus e andando %d cm"%(dPolar[0],dPolar[1]))
 	print(dPolar[0]-teta)
+	print(xis,ips)
 	if (dPolar[0]-teta > 0):
 		x.esqRad(dPolar[0]-teta)
 	elif (dPolar[0]-teta < 0):
@@ -51,6 +60,8 @@ for item in range(len(pontos)):
 	cos = math.cos(math.radians(dPolar[0]))
 	coor.writeLoc(arquivoRobo,xis,ips,sen,cos,dPolar[0]) #(arq,x,y,sen,cos,teta)
 	time.sleep(1)
+	"""
 	s = input("Entre S para sair: ")
 	if s == "s":
 		break
+	"""

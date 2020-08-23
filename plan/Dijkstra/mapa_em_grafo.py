@@ -10,6 +10,10 @@ import argparse
 
 ap = argparse.ArgumentParser(description= 'converte mapa em jpg para txt com obstaculos')
 ap.add_argument(	'mapa', type=str, help= 'um endereco de arquivo jpg para leitura do mapa de obstaculos')
+ap.add_argument(	'xisS', type=int)
+ap.add_argument(	'ipsS', type=int)
+ap.add_argument(	'xisG', type=int)
+ap.add_argument(	'ipsG', type=int)
 args = ap.parse_args()
 print(args.mapa)
 
@@ -28,12 +32,17 @@ class aresta:
 
 jpg = args.mapa
 tamRobo = 30
+"""
 entrada = raw_input('insira os pontos de inicio e obj separados por espaco: ')
 pts = entrada.split(' ')
 inicio = [int(pts[0]),int(pts[1])]
 obj = [int(pts[2]),int(pts[3])]
+"""
+inicio = [args.xisS,args.ipsS]
+obj = [args.xisG,args.ipsG]
 
-nome = pts[0]+'_'+pts[1]+'_a'+pts[2]+'_'+pts[3]
+# nome = pts[0]+'_'+pts[1]+'_a'+pts[2]+'_'+pts[3]
+nome = '%d_%d_a%d_%d'%(args.xisS,args.ipsS,args.xisG,args.ipsG)
 nomeV = 'grafo_'+nome
 nomeB = 'bordas_'+nome
 nomeA = 'arestas_'+nome

@@ -3,17 +3,19 @@ from time import sleep
 
 class mover:
 	def __init__(self):
+		"""pinos da ponte H"""
 		self.in3 = 24
 		self.in4 = 23
 		self.in1 = 21
 		self.in2 = 20
 		self.enB = 12
 		self.enA = 18
-		self.encEsq = 17
-		self.encDir = 27
+		"""pinos dos encoders"""
+		self.encEsq = 17	#encoder esquerdo
+		self.encDir = 27	#encoder direito
 		
-		GPIO.setmode(GPIO.BCM)
-		
+		GPIO.setmode(GPIO.BCM)	#identificacao dos pinos da Rasp padrao BCM
+		#configura pinos da ponte H como output
 		GPIO.setup(self.in1,GPIO.OUT)
 		GPIO.setup(self.in2,GPIO.OUT)
 		GPIO.setup(self.in3,GPIO.OUT)
@@ -21,39 +23,45 @@ class mover:
 		GPIO.setup(self.enA,GPIO.OUT)
 		GPIO.setup(self.enB,GPIO.OUT)
 		
+		#inicia PWM nos pinos ENable da ponte H
 		self.pwmEsq = GPIO.PWM(18,100)
 		self.pwmEsq.start(0)
 		self.pwmDir = GPIO.PWM(12,100)
 		self.pwmDir.start(0)
+		
+		#configura os pinos dos encoders como input
 		GPIO.setup(self.encEsq,GPIO.IN)
 		GPIO.setup(self.encDir,GPIO.IN)
 		
+		#acrescenta deteccao de bordas de interrupcao nos pinos encoders
 		GPIO.add_event_detect(self.encEsq, GPIO.BOTH, callback=self.esquerda)
 		GPIO.add_event_detect(self.encDir, GPIO.BOTH, callback=self.direita)
 		
+		#inicia variaveis de contagem de bordas nos encoders
 		self.pDir = 0
 		self.pEsq = 0
 
-	def contadorE(self):
+	def contadorE(self):	#incrementa pEsq
 		#global self.pEsq
 		self.pEsq += 1
 		return self.pEsq
 		
-	def contadorD(self):
+	def contadorD(self):	#incrementa pDir
 		#global self.pDir
 		self.pDir += 1
 		return self.pDir
 		
-	def esquerda(self,vazio):
+	def esquerda(self,vazio):	#funcao chamada na leitura de interrupcao durante giro da roda esquerda
 		if GPIO.input(self.encEsq):
 			#print ("esquerdo: ",self.contadorE())
 			return self.contadorE()
 			#pass
-	def direita(self,vazio):
+	def direita(self,vazio):		#funcao chamada na leitura de interrupcao durante giro da roda direita
 		if GPIO.input(self.encDir):
 			#print ("direito: ",self.contadorD())
 			return self.contadorD()
 			#pass
+	"""REVISAR"""
 	def esq(self,d):
 		self.setPoint = d/15
 		while(self.pDir <= self.setPoint):
@@ -67,6 +75,7 @@ class mover:
 		GPIO.output(self.in2,GPIO.HIGH)
 		#GPIO.cleanup()
 	
+	"""REVISAR"""
 	def dire(self,d):
 		self.setP = d/15
 		while(self.pEsq <= self.setP):
@@ -91,15 +100,7 @@ class mover:
 		GPIO.output(self.in2,GPIO.HIGH)
 		GPIO.output(self.in3,GPIO.LOW)
 		GPIO.output(self.in4,GPIO.HIGH)
-		'''
-		while (True):
-			#retorna a distancia percorrida baseada na maior leitura entre os encoders
-			a = max(self.pEsq,self.pDir)*3
-			print (a)
-			return (a)
-			if (pc == 0):
-				break
-		'''
+		
 		a = max(self.pEsq,self.pDir)*3
 		#print (a)
 		if (pc == 0):
